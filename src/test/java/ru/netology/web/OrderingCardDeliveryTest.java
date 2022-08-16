@@ -21,7 +21,7 @@ public class OrderingCardDeliveryTest {
     }
 
     String planningDate = date(3);
-
+    String datePast = date(-2);
 
     @Test
     void successfullyTest() {
@@ -45,6 +45,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Санкт-Питербург");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+79999999999");
@@ -59,6 +60,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск ");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+78888888888");
@@ -73,6 +75,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Санкт-Петербург");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+79999999999");
@@ -87,6 +90,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+80000000000");
@@ -103,6 +107,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
@@ -119,6 +124,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Фёдорова Оксана");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
@@ -135,6 +141,7 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Marina Marina");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
@@ -142,6 +149,22 @@ public class OrderingCardDeliveryTest {
         $x("//span[@class='button__text']").click();
         $("[data-test-id='name'] .input__sub").
                 should(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
+
+    }
+
+    @Test
+    void testDate(){
+        Configuration.holdBrowserOpen = true;
+        open("http://localhost:9999");
+        $x("//input[@placeholder='Город']").setValue("Новосибирск");
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        $x("//input[@placeholder='Дата встречи']").setValue(datePast);
+        $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
+        $("[data-test-id = 'phone'] input").setValue("+79876543210");
+        $("[data-test-id = 'agreement']").click();
+        $x("//span[@class='button__text']").click();
+        $("[data-test-id='date'] .input__sub").
+                should(exactText("Заказ на выбранную дату невозможен"));
 
     }
 }
