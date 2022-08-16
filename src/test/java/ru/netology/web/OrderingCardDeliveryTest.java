@@ -3,6 +3,7 @@ package ru.netology.web;
 
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Keys;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -14,20 +15,28 @@ import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class OrderingCardDeliveryTest {
-    String date = LocalDate.now().plusDays(3).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+    public String date(int number) {
+        return LocalDate.now().plusDays(number).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+    }
+
+    String planningDate = date(3);
+
 
     @Test
     void successfullyTest() {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Санкт-Петербург");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева-Огарева");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
         $(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
-        $("[data-test-id=notification] .notification__content").should(exactText("Встреча успешно забронирована на " + date));
+        $("[data-test-id=notification] .notification__content").
+                should(exactText("Встреча успешно забронирована на " + planningDate));
 
     }
 
@@ -36,14 +45,12 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Санкт-Питербург");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+79999999999");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
-        //$(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
-        //$("[data-test-id=notification] .notification__content").should(exactText("Встреча успешно забронирована на " + date));
-        $("[data-test-id='city'] .input__sub").should(exactText("Доставка в выбранный город недоступна"));
+        $("[data-test-id='city']  .input__sub").should(exactText("Доставка в выбранный город недоступна"));
     }
 
 
@@ -52,13 +59,11 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск ");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+78888888888");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
-        //$(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
-        //$("[data-test-id=notification] .notification__content").should(exactText("Встреча успешно забронирована на " + date));
         $("[data-test-id='city'] .input__sub").should(exactText("Доставка в выбранный город недоступна"));
 
     }
@@ -68,14 +73,11 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Санкт-Петербург");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+79999999999");
-        //$("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
-        //$(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
-        //$("[data-test-id=notification] .notification__content").should(exactText("Встреча успешно забронирована на " + date));
-        $(withText("Я соглашаюсь с условиями обработки и использования моих персональных данных")).
+        $("[data-test-id='agreement'].input_invalid").
                 should(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных"));
     }
 
@@ -85,14 +87,14 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина Цветаева");
         $("[data-test-id = 'phone'] input").setValue("+80000000000");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
         $(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
         $("[data-test-id=notification] .notification__content").
-                should(exactText("Встреча успешно забронирована на " + date));
+                should(exactText("Встреча успешно забронирована на " + planningDate));
 
     }
 
@@ -101,14 +103,14 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Марина");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
         $(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
         $("[data-test-id=notification] .notification__content").
-                should(exactText("Встреча успешно забронирована на " + date));
+                should(exactText("Встреча успешно забронирована на " + planningDate));
 
     }
 
@@ -117,13 +119,11 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Фёдорова Оксана");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
-        // $(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
-        // $("[data-test-id=notification] .notification__content").should(exactText("Встреча успешно забронирована на " + date));
         $("[data-test-id='name'] .input__sub").
                 should(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
 
@@ -135,13 +135,11 @@ public class OrderingCardDeliveryTest {
         Configuration.holdBrowserOpen = true;
         open("http://localhost:9999");
         $x("//input[@placeholder='Город']").setValue("Новосибирск");
-        $x("//input[@placeholder='Дата встречи']").setValue(date);
+        $x("//input[@placeholder='Дата встречи']").setValue(planningDate);
         $("[data-test-id = 'name'] input").setValue("Marina Marina");
         $("[data-test-id = 'phone'] input").setValue("+79876543210");
         $("[data-test-id = 'agreement']").click();
         $x("//span[@class='button__text']").click();
-        //$(withText("Успешно!")).should(visible, Duration.ofSeconds(15));
-        //$("[data-test-id=notification] .notification__content").should(exactText("Встреча успешно забронирована на " + date));
         $("[data-test-id='name'] .input__sub").
                 should(exactText("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы."));
 
